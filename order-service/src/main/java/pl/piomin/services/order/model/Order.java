@@ -1,12 +1,15 @@
 package pl.piomin.services.order.model;
 
+import java.util.List;
+
 public class Order {
 
 	private Long id;
 	private OrderStatus status;
 	private int price;
 	private Long customerId;
-	private Long productId;
+	private Long accountId;
+	private List<Long> productIds;
 
 	public Long getId() {
 		return id;
@@ -40,12 +43,20 @@ public class Order {
 		this.customerId = customerId;
 	}
 
-	public Long getProductId() {
-		return productId;
+	public Long getAccountId() {
+		return accountId;
 	}
 
-	public void setProductId(Long productId) {
-		this.productId = productId;
+	public void setAccountId(Long accountId) {
+		this.accountId = accountId;
+	}
+
+	public List<Long> getProductIds() {
+		return productIds;
+	}
+
+	public void setProductIds(List<Long> productIds) {
+		this.productIds = productIds;
 	}
 
 }

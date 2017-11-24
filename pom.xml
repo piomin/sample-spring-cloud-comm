@@ -30,5 +30,7 @@
 
 	<modules>
 		<module>order-service</module>
+		<module>account-service</module>
+		<module>product-service</module>
 	</modules>
 </project>

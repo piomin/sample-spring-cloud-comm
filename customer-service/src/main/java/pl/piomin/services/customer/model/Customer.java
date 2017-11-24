@@ -1,4 +1,4 @@
-package pl.piomin.services.order.model;
+package pl.piomin.services.customer.model;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,16 @@ public class Customer {
 	private String name;
 	private CustomerType type;
 	private List<Account> accounts = new ArrayList<>();
+
+	public Customer() {
+
+	}
+	
+	public Customer(Long id, String name, CustomerType type) {
+		this.id = id;
+		this.name = name;
+		this.type = type;
+	}
 
 	public Long getId() {
 		return id;

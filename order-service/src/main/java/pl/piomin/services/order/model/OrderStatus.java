@@ -2,6 +2,6 @@ package pl.piomin.services.order.model;
 
 public enum OrderStatus {
 
-	NEW, PROCESSING, ACCPETED, DONE;
+	NEW, PROCESSING, ACCEPTED, DONE, REJECTED;
 	
 }

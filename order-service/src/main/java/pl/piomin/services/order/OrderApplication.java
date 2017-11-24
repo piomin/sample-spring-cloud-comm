@@ -8,6 +8,8 @@ import org.springframework.cloud.netflix.ribbon.RibbonClients;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import pl.piomin.services.order.repository.OrderRepository;
+
 @SpringBootApplication
 @RibbonClients({
 	@RibbonClient(name = "account-service"),
@@ -24,6 +26,11 @@ public class OrderApplication {
 	
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(OrderApplication.class).web(true).run(args);
+	}
+	
+	@Bean
+	OrderRepository repository() {
+		return new OrderRepository();
 	}
 
 }
