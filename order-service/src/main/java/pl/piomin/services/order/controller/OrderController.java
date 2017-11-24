@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.client.RestTemplate;
 
@@ -19,9 +18,10 @@ import pl.piomin.services.order.model.Product;
 import pl.piomin.services.order.repository.OrderRepository;
 
 @RestController
-@RequestMapping("/order")
 public class OrderController {
 
+//	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
+	
 	@Autowired
 	OrderRepository repository;	
 	@Autowired
@@ -30,7 +30,7 @@ public class OrderController {
 	@PostMapping
 	public Order prepare(@RequestBody Order order) {
 		int price = 0;
-		Product[] products = template.postForObject("http://product-service/{id}", order.getProductIds(), Product[].class);
+		Product[] products = template.postForObject("http://product-service/ids", order.getProductIds(), Product[].class);
 		Customer customer = template.getForObject("http://customer-service/withAccounts/{id}", Customer.class, order.getCustomerId());
 		for (Product product : products) 
 			price += product.getPrice();
@@ -43,11 +43,15 @@ public class OrderController {
 		} else {
 			order.setStatus(OrderStatus.REJECTED);
 		}
-		return order;
+		return repository.add(order);
 	}
 	
 	@PutMapping("/{id}")
-	public Order accept(@PathVariable Long id, @RequestBody Order order) {
+	public Order accept(@PathVariable Long id) {
+		final Order order = repository.findById(id);
+		template.put("http://account-service/withdraw/{id}/{amount}", null, order.getAccountId(), order.getPrice());
+		order.setStatus(OrderStatus.DONE);
+		repository.update(order);
 		return order;
 	}
 	

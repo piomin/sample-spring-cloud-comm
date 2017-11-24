@@ -17,12 +17,8 @@ public class AccountRepository {
 		return account;
 	}
 	
-	public void addAll(List<Account> accounts) {
-		accounts.addAll(accounts);
-	}
-	
 	public Account update(Account account) {
-		accounts.set(account.getId().intValue(), account);
+		accounts.set(account.getId().intValue() - 1, account);
 		return account;
 	}
 	

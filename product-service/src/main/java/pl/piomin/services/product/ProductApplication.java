@@ -1,8 +1,5 @@
 package pl.piomin.services.product;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -35,18 +32,16 @@ public class ProductApplication {
 	@Bean
 	ProductRepository repository() {
 		ProductRepository repository = new ProductRepository();
-		List<Product> products = new ArrayList<>();
-		products.add(new Product(1L, "Test1", 1000));
-		products.add(new Product(2L, "Test2", 1500));
-		products.add(new Product(3L, "Test3", 2000));
-		products.add(new Product(4L, "Test4", 3000));
-		products.add(new Product(5L, "Test5", 1300));
-		products.add(new Product(6L, "Test6", 2700));
-		products.add(new Product(7L, "Test7", 3500));
-		products.add(new Product(8L, "Test8", 1250));
-		products.add(new Product(9L, "Test9", 2450));
-		products.add(new Product(10L, "Test10", 800));
-		repository.addAll(products);
+		repository.add(new Product("Test1", 1000));
+		repository.add(new Product("Test2", 1500));
+		repository.add(new Product("Test3", 2000));
+		repository.add(new Product("Test4", 3000));
+		repository.add(new Product("Test5", 1300));
+		repository.add(new Product("Test6", 2700));
+		repository.add(new Product("Test7", 3500));
+		repository.add(new Product("Test8", 1250));
+		repository.add(new Product("Test9", 2450));
+		repository.add(new Product("Test10", 800));
 		return repository;
 	}
 

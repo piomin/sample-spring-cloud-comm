@@ -17,12 +17,8 @@ public class OrderRepository {
 		return order;
 	}
 	
-	public void addAll(List<Order> orders) {
-		orders.addAll(orders);
-	}
-	
 	public Order update(Order order) {
-		orders.set(order.getId().intValue(), order);
+		orders.set(order.getId().intValue() - 1, order);
 		return order;
 	}
 	

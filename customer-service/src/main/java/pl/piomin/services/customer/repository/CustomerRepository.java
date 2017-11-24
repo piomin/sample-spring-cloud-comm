@@ -17,12 +17,8 @@ public class CustomerRepository {
 		return customer;
 	}
 	
-	public void addAll(List<Customer> customers) {
-		customers.addAll(customers);
-	}
-	
 	public Customer update(Customer customer) {
-		customers.set(customer.getId().intValue(), customer);
+		customers.set(customer.getId().intValue() - 1, customer);
 		return customer;
 	}
 	

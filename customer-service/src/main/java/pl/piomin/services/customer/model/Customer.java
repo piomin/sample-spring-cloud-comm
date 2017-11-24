@@ -14,8 +14,7 @@ public class Customer {
 
 	}
 	
-	public Customer(Long id, String name, CustomerType type) {
-		this.id = id;
+	public Customer(String name, CustomerType type) {
 		this.name = name;
 		this.type = type;
 	}

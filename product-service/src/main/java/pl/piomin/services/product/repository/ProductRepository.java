@@ -17,12 +17,8 @@ public class ProductRepository {
 		return product;
 	}
 	
-	public void addAll(List<Product> products) {
-		products.addAll(products);
-	}
-	
 	public Product update(Product product) {
-		products.set(product.getId().intValue(), product);
+		products.set(product.getId().intValue() - 1, product);
 		return product;
 	}
 	
