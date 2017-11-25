@@ -31,6 +31,7 @@
 	<modules>
 		<module>order-service</module>
 		<module>account-service</module>
+		<module>customer-service</module>
 		<module>product-service</module>
 		<module>discovery-service</module>
 	</modules>
