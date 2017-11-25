@@ -1,5 +1,6 @@
 package pl.piomin.services.order.controller;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -8,8 +9,10 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
+import pl.piomin.services.order.client.AccountClient;
+import pl.piomin.services.order.client.CustomerClient;
+import pl.piomin.services.order.client.ProductClient;
 import pl.piomin.services.order.model.Account;
 import pl.piomin.services.order.model.Customer;
 import pl.piomin.services.order.model.Order;
@@ -25,13 +28,17 @@ public class OrderController {
 	@Autowired
 	OrderRepository repository;	
 	@Autowired
-	RestTemplate template;
+	AccountClient accountClient;
+	@Autowired
+	CustomerClient customerClient;
+	@Autowired
+	ProductClient productClient;
 	
 	@PostMapping
 	public Order prepare(@RequestBody Order order) {
 		int price = 0;
-		Product[] products = template.postForObject("http://product-service/ids", order.getProductIds(), Product[].class);
-		Customer customer = template.getForObject("http://customer-service/withAccounts/{id}", Customer.class, order.getCustomerId());
+		List<Product> products = productClient.findByIds(order.getProductIds());
+		Customer customer = customerClient.findByIdWithAccounts(order.getCustomerId()	);
 		for (Product product : products) 
 			price += product.getPrice();
 		final int priceDiscounted = priceDiscount(price, customer);
@@ -49,7 +56,7 @@ public class OrderController {
 	@PutMapping("/{id}")
 	public Order accept(@PathVariable Long id) {
 		final Order order = repository.findById(id);
-		template.put("http://account-service/withdraw/{id}/{amount}", null, order.getAccountId(), order.getPrice());
+		accountClient.withdraw(order.getAccountId(), order.getPrice());
 		order.setStatus(OrderStatus.DONE);
 		repository.update(order);
 		return order;
