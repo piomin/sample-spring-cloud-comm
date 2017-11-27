@@ -10,15 +10,15 @@ import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import pl.piomin.services.account.model.Account;
+import pl.piomin.services.customer.model.Customer;
 import pl.piomin.services.order.client.AccountClient;
 import pl.piomin.services.order.client.CustomerClient;
 import pl.piomin.services.order.client.ProductClient;
-import pl.piomin.services.order.model.Account;
-import pl.piomin.services.order.model.Customer;
 import pl.piomin.services.order.model.Order;
 import pl.piomin.services.order.model.OrderStatus;
-import pl.piomin.services.order.model.Product;
 import pl.piomin.services.order.repository.OrderRepository;
+import pl.piomin.services.product.model.Product;
 
 @RestController
 public class OrderController {
@@ -37,8 +37,8 @@ public class OrderController {
 	@PostMapping
 	public Order prepare(@RequestBody Order order) {
 		int price = 0;
-		List<Product> products = productClient.findByIds(order.getProductIds());
-		Customer customer = customerClient.findByIdWithAccounts(order.getCustomerId()	);
+		List<Product> products = productClient.find(order.getProductIds());
+		Customer customer = customerClient.findByIdWithAccounts(order.getCustomerId());
 		for (Product product : products) 
 			price += product.getPrice();
 		final int priceDiscounted = priceDiscount(price, customer);

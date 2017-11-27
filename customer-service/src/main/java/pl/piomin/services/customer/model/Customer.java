@@ -3,6 +3,8 @@ package pl.piomin.services.customer.model;
 import java.util.ArrayList;
 import java.util.List;
 
+import pl.piomin.services.account.model.Account;
+
 public class Customer {
 
 	private Long id;
