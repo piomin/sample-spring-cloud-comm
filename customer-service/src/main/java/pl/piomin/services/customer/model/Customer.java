@@ -51,4 +51,9 @@ public class Customer {
 		this.accounts = accounts;
 	}
 
+	@Override
+	public String toString() {
+		return "Customer [id=" + id + ", name=" + name + ", type=" + type + ", accounts=" + accounts + "]";
+	}
+
 }
