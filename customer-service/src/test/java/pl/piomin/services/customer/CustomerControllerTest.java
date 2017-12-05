@@ -36,7 +36,11 @@ public class CustomerControllerTest {
             		service("account-service:8091")
             			.andDelay(200, TimeUnit.MILLISECONDS).forAll()
             			.get(startsWith("/customer/"))
-            			.willReturn(success("[{\"id\":\"1\",\"number\":\"1234567890\",\"balance\":5000}]", "application/json")), 
+            			.willReturn(success("[{\"id\":\"1\",\"number\":\"1234567890\",\"balance\":5000}]", "application/json")),
+                	service("account-service:10091")
+            			.andDelay(10000, TimeUnit.MILLISECONDS).forAll()
+            			.get(startsWith("/customer/"))
+            			.willReturn(success("[{\"id\":\"3\",\"number\":\"1234567892\",\"balance\":10000}]", "application/json")),
                     service("account-service:9091")
                     	.andDelay(50, TimeUnit.MILLISECONDS).forAll()
             			.get(startsWith("/customer/"))
@@ -45,16 +49,24 @@ public class CustomerControllerTest {
     
     @Test
     public void testCustomerWithAccounts() {
-    	int a = 0, b = 0;
+    	int a = 0, b = 0, d = 0;
     	for (int i = 0; i < 1000; i++) {
-        	Customer c = template.getForObject("/withAccounts/{id}", Customer.class, 1);
-        	LOGGER.info("Customer: {}", c);
-        	if (c.getAccounts().get(0).getId().equals(1L))
-        		a++;
-        	else
-        		b++;
+    		try {
+    			Customer c = template.getForObject("/withAccounts/{id}", Customer.class, 1);
+            	LOGGER.info("Customer: {}", c);
+            	if (c != null) {
+	            	if (c.getAccounts().get(0).getId().equals(1L))
+	            		a++;
+	            	else
+	            		b++;
+            	}
+    		} catch (Exception e) {
+    			LOGGER.error("Error connecting with service", e);
+    			d++;
+    		}
+
 		}
-    	LOGGER.info("TEST RESULT: 8091={}, 9091={}", a, b);
+    	LOGGER.info("TEST RESULT: 8091={}, 9091={}, 10091={}", a, b, d);
     }
     
 }

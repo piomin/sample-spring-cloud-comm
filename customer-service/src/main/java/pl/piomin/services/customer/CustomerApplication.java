@@ -2,6 +2,7 @@ package pl.piomin.services.customer;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
@@ -17,8 +18,11 @@ public class CustomerApplication {
 
 	@LoadBalanced
 	@Bean
-	RestTemplate restTemplate() {
-		return new RestTemplate();
+	RestTemplate restTemplate(RestTemplateBuilder restTemplateBuilder) {
+		return restTemplateBuilder
+				.setConnectTimeout(1000)
+				.setReadTimeout(1000)
+				.build();
 	}
 	
 	public static void main(String[] args) {

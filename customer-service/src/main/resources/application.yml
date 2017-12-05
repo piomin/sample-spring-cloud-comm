@@ -6,5 +6,10 @@ account-service:
     eureka:
       enabled: false
     listOfServers: account-service:8091, account-service:9091
-    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.WeightedResponseTimeRule
-  
+#    NFLoadBalancerRuleClassName: com.netflix.loadbalancer.RoundRobinRule
+
+    
+logging:
+  level:
+   com.netflix: DEBUG
+   org.springframework.cloud: DEBUG
