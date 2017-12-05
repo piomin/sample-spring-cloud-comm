@@ -8,12 +8,13 @@ import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
 
+import pl.piomin.services.customer.config.RibbonConfiguration;
 import pl.piomin.services.customer.model.Customer;
 import pl.piomin.services.customer.model.CustomerType;
 import pl.piomin.services.customer.repository.CustomerRepository;
 
 @SpringBootApplication
-@RibbonClient(name = "account-service")
+@RibbonClient(name = "account-service", configuration = RibbonConfiguration.class)
 public class CustomerApplication {
 
 	@LoadBalanced
