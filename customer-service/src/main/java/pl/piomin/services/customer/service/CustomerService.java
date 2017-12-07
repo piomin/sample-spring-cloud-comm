@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.Cache.ValueWrapper;
+import org.springframework.cache.CacheManager;
+import org.springframework.cache.annotation.CachePut;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
@@ -18,6 +21,8 @@ import pl.piomin.services.customer.repository.CustomerRepository;
 @Service
 public class CustomerService {
 
+	@Autowired
+	CacheManager cacheManager;
 	@Autowired
 	RestTemplate template;
 	@Autowired
@@ -43,6 +48,7 @@ public class CustomerService {
 		repository.delete(id);
 	}
 
+	@CachePut("accounts")
 	@HystrixCommand(fallbackMethod = "findCustomerAccountsFallback")
 	public List<Account> findCustomerAccounts(Long id) {
 		Account[] accounts = template.getForObject("http://account-service/customer/{customerId}", Account[].class, id);
@@ -50,7 +56,12 @@ public class CustomerService {
 	}
 	
 	public List<Account> findCustomerAccountsFallback(Long id) {
-		return new ArrayList<>();
+		ValueWrapper w = cacheManager.getCache("accounts").get(id);
+		if (w != null) {
+			return (List<Account>) w.get();
+		} else {
+			return new ArrayList<>();
+		}
 	}
 	
 }
