@@ -1,8 +1,6 @@
 package pl.piomin.services.customer.controller;
 
-import java.util.Arrays;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -12,51 +10,46 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
-import pl.piomin.services.customer.model.Account;
 import pl.piomin.services.customer.model.Customer;
-import pl.piomin.services.customer.repository.CustomerRepository;
+import pl.piomin.services.customer.service.CustomerService;
 
 @RestController
 public class CustomerController {
 
 	@Autowired
-	RestTemplate template;
-	@Autowired
-	CustomerRepository repository;
-	
+	CustomerService service;
+
 	@PostMapping
 	public Customer add(@RequestBody Customer customer) {
-		return repository.add(customer);
+		return service.add(customer);
 	}
-	
+
 	@PutMapping
 	public Customer update(@RequestBody Customer customer) {
-		return repository.update(customer);
+		return service.update(customer);
 	}
-	
+
 	@GetMapping("/{id}")
 	public Customer findById(@PathVariable("id") Long id) {
-		return repository.findById(id);
+		return service.findById(id);
 	}
-	
+
 	@GetMapping("/withAccounts/{id}")
 	public Customer findByIdWithAccounts(@PathVariable("id") Long id) {
-		Account[] accounts = template.getForObject("http://account-service/customer/{customerId}", Account[].class, id);
-		Customer c = repository.findById(id);
-		c.setAccounts(Arrays.stream(accounts).collect(Collectors.toList()));
+		Customer c = service.findById(id);
+		c.setAccounts(service.findCustomerAccounts(id));
 		return c;
 	}
-	
+
 	@PostMapping("/ids")
 	public List<Customer> find(@RequestBody List<Long> ids) {
-		return repository.find(ids);
+		return service.find(ids);
 	}
-	
+
 	@DeleteMapping("/{id}")
 	public void delete(@PathVariable("id") Long id) {
-		repository.delete(id);
+		service.delete(id);
 	}
-	
+
 }

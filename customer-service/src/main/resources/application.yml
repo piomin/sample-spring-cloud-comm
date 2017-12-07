@@ -5,5 +5,5 @@ account-service:
   ribbon:
     eureka:
       enabled: false
-    listOfServers: localhost:8091
+    listOfServers: localhost:8091, localhost:9091
   
