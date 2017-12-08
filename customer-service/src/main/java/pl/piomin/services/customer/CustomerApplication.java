@@ -26,16 +26,16 @@ public class CustomerApplication {
 	RestTemplate restTemplate() {
 		return new RestTemplate();
 	}
-	
+
 	public static void main(String[] args) {
 		new SpringApplicationBuilder(CustomerApplication.class).web(true).run(args);
 	}
 
-    @Bean
-    public CacheManager cacheManager() {
-        return new ConcurrentMapCacheManager("accounts");
-    }
-    
+	@Bean
+	public CacheManager cacheManager() {
+		return new ConcurrentMapCacheManager("accounts");
+	}
+
 	@Bean
 	CustomerRepository repository() {
 		CustomerRepository repository = new CustomerRepository();
@@ -44,5 +44,5 @@ public class CustomerApplication {
 		repository.add(new Customer("Jacob Ryan", CustomerType.VIP));
 		return repository;
 	}
-	
+
 }

@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
 import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixProperty;
 
 import pl.piomin.services.customer.model.Account;
 import pl.piomin.services.customer.model.Customer;
@@ -49,7 +50,15 @@ public class CustomerService {
 	}
 
 	@CachePut("accounts")
-	@HystrixCommand(fallbackMethod = "findCustomerAccountsFallback")
+	@HystrixCommand(fallbackMethod = "findCustomerAccountsFallback", 
+		commandProperties = {
+			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
+			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
+			@HystrixProperty(name = "circuitBreaker.errorThresholdPercentage", value = "30"),
+			@HystrixProperty(name = "circuitBreaker.sleepWindowInMilliseconds", value = "10000"),
+			@HystrixProperty(name = "metrics.rollingStats.timeInMilliseconds", value = "10000")
+		}
+	)
 	public List<Account> findCustomerAccounts(Long id) {
 		Account[] accounts = template.getForObject("http://account-service/customer/{customerId}", Account[].class, id);
 		return Arrays.stream(accounts).collect(Collectors.toList());
