@@ -7,6 +7,7 @@ import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.concurrent.ConcurrentMapCacheManager;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.client.RestTemplate;
@@ -18,6 +19,7 @@ import pl.piomin.services.customer.repository.CustomerRepository;
 @SpringBootApplication
 @RibbonClient(name = "account-service")
 @EnableHystrix
+@EnableHystrixDashboard
 @EnableCaching
 public class CustomerApplication {
 

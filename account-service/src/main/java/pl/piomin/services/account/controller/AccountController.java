@@ -2,6 +2,8 @@ package pl.piomin.services.account.controller;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -16,6 +18,8 @@ import pl.piomin.services.account.repository.AccountRepository;
 
 @RestController
 public class AccountController {
+
+	private static final Logger LOGGER = LoggerFactory.getLogger(AccountController.class);
 
 	@Autowired
 	AccountRepository repository;
@@ -32,6 +36,7 @@ public class AccountController {
 
 	@PutMapping("/withdraw/{id}/{amount}")
 	public Account withdraw(@PathVariable("id") Long id, @PathVariable("amount") int amount) {
+		LOGGER.info("Withdraw: id={}, amount={}", id, amount);
 		Account account = repository.findById(id);
 		account.setBalance(account.getBalance() - amount);
 		return repository.update(account);
@@ -44,6 +49,7 @@ public class AccountController {
 
 	@GetMapping("/customer/{customerId}")
 	public List<Account> findByCustomerId(@PathVariable("customerId") Long customerId) {
+		LOGGER.info("FindByCustomerId: customerId={}", customerId);
 		return repository.findByCustomer(customerId);
 	}
 

@@ -59,4 +59,10 @@ public class Order {
 		this.productIds = productIds;
 	}
 
+	@Override
+	public String toString() {
+		return "Order [id=" + id + ", status=" + status + ", price=" + price + ", customerId=" + customerId
+				+ ", productIds=" + productIds + "]";
+	}
+
 }

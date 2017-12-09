@@ -5,7 +5,7 @@ account-service:
   ribbon:
     eureka:
       enabled: false
-    listOfServers: localhost:8091
+    listOfServers: localhost:8091,localhost:9091
 customer-service:
   ribbon:
     eureka:
@@ -15,5 +15,5 @@ product-service:
   ribbon:
     eureka:
       enabled: false
-    listOfServers: localhost:8093
+    listOfServers: localhost:8093,localhost:9093
   

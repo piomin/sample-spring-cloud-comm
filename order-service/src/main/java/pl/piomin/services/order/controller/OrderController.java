@@ -1,14 +1,16 @@
 package pl.piomin.services.order.controller;
 
+import java.util.List;
 import java.util.Optional;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
-import org.springframework.web.client.RestTemplate;
 
 import pl.piomin.services.order.model.Account;
 import pl.piomin.services.order.model.Customer;
@@ -16,22 +18,30 @@ import pl.piomin.services.order.model.Order;
 import pl.piomin.services.order.model.OrderStatus;
 import pl.piomin.services.order.model.Product;
 import pl.piomin.services.order.repository.OrderRepository;
+import pl.piomin.services.order.service.AccountService;
+import pl.piomin.services.order.service.CustomerService;
+import pl.piomin.services.order.service.ProductService;
 
 @RestController
 public class OrderController {
 
-//	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
+	private static final Logger LOGGER = LoggerFactory.getLogger(OrderController.class);
 	
 	@Autowired
 	OrderRepository repository;	
 	@Autowired
-	RestTemplate template;
-	
+	AccountService accountService;
+	@Autowired
+	CustomerService customerService;
+	@Autowired
+	ProductService productService;
+		
 	@PostMapping
 	public Order prepare(@RequestBody Order order) {
+		LOGGER.info("New order: {}", order);
 		int price = 0;
-		Product[] products = template.postForObject("http://product-service/ids", order.getProductIds(), Product[].class);
-		Customer customer = template.getForObject("http://customer-service/withAccounts/{id}", Customer.class, order.getCustomerId());
+		List<Product> products = productService.findProductsByIds(order.getProductIds());
+		Customer customer = customerService.findCustomerWithAccounts(order.getCustomerId());
 		for (Product product : products) 
 			price += product.getPrice();
 		final int priceDiscounted = priceDiscount(price, customer);
@@ -49,7 +59,7 @@ public class OrderController {
 	@PutMapping("/{id}")
 	public Order accept(@PathVariable Long id) {
 		final Order order = repository.findById(id);
-		template.put("http://account-service/withdraw/{id}/{amount}", null, order.getAccountId(), order.getPrice());
+		accountService.withdraw(order.getAccountId(), order.getPrice());
 		order.setStatus(OrderStatus.DONE);
 		repository.update(order);
 		return order;
@@ -69,6 +79,8 @@ public class OrderController {
 			break;
 		}
 		int ordersNum = repository.countByCustomerId(customer.getId());
+		if (ordersNum > 10)
+			ordersNum = 10;
 		discount += (ordersNum*0.01);
 		return (int) (price - (price * discount));
 	}
