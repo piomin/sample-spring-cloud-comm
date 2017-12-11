@@ -2,6 +2,7 @@ package pl.piomin.services.product;
 
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
 import org.springframework.cloud.netflix.ribbon.RibbonClient;
 import org.springframework.cloud.netflix.ribbon.RibbonClients;
@@ -12,6 +13,7 @@ import pl.piomin.services.product.model.Product;
 import pl.piomin.services.product.repository.ProductRepository;
 
 @SpringBootApplication
+@EnableDiscoveryClient
 @RibbonClients({
 	@RibbonClient(name = "account-service"),
 	@RibbonClient(name = "customer-service"),

@@ -33,5 +33,6 @@
 		<module>account-service</module>
 		<module>product-service</module>
 		<module>hystrix-dashboard</module>
+		<module>discovery-service</module>
 	</modules>
 </project>
