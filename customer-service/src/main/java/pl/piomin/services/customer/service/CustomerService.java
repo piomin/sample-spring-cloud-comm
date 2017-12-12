@@ -50,7 +50,7 @@ public class CustomerService {
 	}
 
 	@CachePut("accounts")
-	@HystrixCommand(fallbackMethod = "findCustomerAccountsFallback", 
+	@HystrixCommand(commandKey = "account-service.findByCustomer", fallbackMethod = "findCustomerAccountsFallback", 
 		commandProperties = {
 			@HystrixProperty(name = "execution.isolation.thread.timeoutInMilliseconds", value = "500"),
 			@HystrixProperty(name = "circuitBreaker.requestVolumeThreshold", value = "10"),
