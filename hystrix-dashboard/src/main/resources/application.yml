@@ -1,6 +1,11 @@
 spring:  
   application:
     name: hystrix-dashboard
+  rabbitmq:
+    host: 192.168.99.100
+    port: 5672
+    username: guest
+    password: guest
     
 server:
   port: ${PORT:9000}
@@ -10,3 +15,5 @@ turbine:
 #    clusterConfig: ORDER-SERVICE,CUSTOMER-SERVICE
   appConfig: order-service,customer-service
   clusterNameExpression: "'default'"
+#  stream:
+#    port: 9000
