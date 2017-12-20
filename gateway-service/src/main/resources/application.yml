@@ -12,6 +12,7 @@ eureka:
     registerWithEureka: false
     
 zuul:
+  prefix: /api
   routes:
     account-service:
       path: /account/**
@@ -21,3 +22,7 @@ zuul:
       path: /order/**
     product-service:
       path: /product/**
+
+management:
+  security:
+    enabled: false
