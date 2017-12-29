@@ -2,6 +2,10 @@ spring:
   application:
     name: customer-service
 
+logging:
+  level:
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG 
+    
 ---
 spring:
   profiles: zone1

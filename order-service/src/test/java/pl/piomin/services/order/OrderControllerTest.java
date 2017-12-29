@@ -15,9 +15,9 @@ public class OrderControllerTest {
 
 	@Test
 	public void testOrder() throws InterruptedException {
-		for (int i = 0; i < 1; i++) {
+		for (int i = 0; i < 100; i++) {
 			sendAndAcceptOrder();
-			Thread.sleep(100);
+			Thread.sleep(5000);
 		}
 	}
 

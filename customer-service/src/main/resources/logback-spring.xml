@@ -10,7 +10,7 @@
 	</appender>
 	<appender name="FILE"
 		class="ch.qos.logback.core.rolling.RollingFileAppender">
-		<file>logs/order.log</file>
+		<file>logs/customer.log</file>
 		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
 			<fileNamePattern>order.%d{yyyy-MM-dd}.log</fileNamePattern>
 			<maxHistory>10</maxHistory>
@@ -32,7 +32,7 @@
 				<pattern>
 					<pattern>
 						{
-						"appName": "order-service"
+						"appName": "customer-service"
 						}
 					</pattern>
 				</pattern>
