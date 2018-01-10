@@ -4,6 +4,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.builder.SpringApplicationBuilder;
 import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.feign.EnableFeignClients;
+import org.springframework.cloud.sleuth.Sampler;
+import org.springframework.cloud.sleuth.sampler.AlwaysSampler;
 import org.springframework.context.annotation.Bean;
 import org.springframework.web.filter.CommonsRequestLoggingFilter;
 
@@ -37,6 +39,11 @@ public class CustomerApplication {
 		repository.add(new Customer("Adam Smith", CustomerType.REGULAR));
 		repository.add(new Customer("Jacob Ryan", CustomerType.VIP));
 		return repository;
+	}
+	
+	@Bean
+	public Sampler defaultSampler() {
+		return new AlwaysSampler();
 	}
 	
 }
