@@ -3,10 +3,12 @@ package pl.piomin.services.order.controller;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.slf4j.MDC;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -64,6 +66,7 @@ public class OrderController {
 			order.setStatus(OrderStatus.REJECTED);
 			LOGGER.info("Account not found: {}", mapper.writeValueAsString(customer.getAccounts()));
 		}
+		Map<String, String> m = MDC.getCopyOfContextMap();
 		return repository.add(order);
 	}
 	
