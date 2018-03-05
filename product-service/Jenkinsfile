@@ -22,7 +22,7 @@ node('dind-node-1') {
   }
 
   stage ('Run') {
-   docker.image("piomin/product-service:${env.version}").run('-p 8093:8093 -m 256M -d --name product --network sample-spring-cloud-network')
+   docker.image("piomin/product-service:${env.version}").run('-p 8093:8093 -m 256M -e EUREKA_DEFAULT_ZONE=http://discovery:8761/eureka -d --name product --network sample-spring-cloud-network')
   }
 
  }
