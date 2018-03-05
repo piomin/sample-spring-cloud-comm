@@ -6,7 +6,7 @@ node('dind-node-1') {
 
   stage('Build') {
    dir('order-service') {
-    sh 'mvn clean install'
+    sh 'mvn clean install -Dmaven.test.skip=true'
    }
    def pom = readMavenPom file:'pom.xml'
    print pom.version
