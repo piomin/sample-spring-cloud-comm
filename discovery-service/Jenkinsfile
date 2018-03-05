@@ -17,12 +17,12 @@ node('dind-node-1') {
   stage('Image') {
    dir ('discovery-service') {
     def app = docker.build "piomin/discovery-service:${env.version}"
-    app.push()
+    //app.push()
    }
   }
 
   stage ('Run') {
-   docker.image("piomin/discovery-service:${env.version}").run('-p 8761:8761 -d --name discovery --network sample-spring-cloud-network')
+   docker.image("piomin/discovery-service:${env.version}").run('-p 8761:8761 -m 256M -d --name discovery --network sample-spring-cloud-network')
   }
 
  }

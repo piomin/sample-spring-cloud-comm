@@ -17,12 +17,12 @@ node('dind-node-1') {
   stage('Image') {
    dir ('product-service') {
     def app = docker.build "piomin/product-service:${env.version}"
-    app.push()
+    //app.push()
    }
   }
 
   stage ('Run') {
-   docker.image("piomin/product-service:${env.version}").run('-p 8093:8093 -d --name product --network sample-spring-cloud-network')
+   docker.image("piomin/product-service:${env.version}").run('-p 8093:8093 -m 256M -d --name product --network sample-spring-cloud-network')
   }
 
  }
